@@ -623,6 +623,7 @@ log_graph_fill(Application_Links *app, Rect_f32 layout_region, Face_ID face_id){
             }
             
             log_graph.max_y_scroll = clamp_bot(line_height, y_bottom - rect_height(event_list_region)*0.5f);
+            // TODO(NJ): max_x_scroll
         }
     }
 }
@@ -677,6 +678,7 @@ log_graph_render(Application_Links *app, Frame_Info frame_info, View_ID view){
         
         Face_ID face_id = get_face_id(app, 0);
         f32 y_scroll = log_graph.y_scroll;
+        f32 x_scroll = log_graph.x_scroll;
         Log_Event *selected_event = log_graph.selected_event;
         if (!log_graph.holding_temp ||
             inner != log_graph.layout_region ||
@@ -685,6 +687,7 @@ log_graph_render(Application_Links *app, Frame_Info frame_info, View_ID view){
             log_graph_fill(app, inner, face_id);
         }
         log_graph.y_scroll = clamp(0.f, y_scroll, log_graph.max_y_scroll);
+        log_graph.x_scroll = clamp(0.f, x_scroll, log_graph.max_x_scroll);
         log_graph.selected_event = selected_event;
         
         Mouse_State mouse = get_mouse_state(app);
@@ -705,6 +708,8 @@ log_graph_render(Application_Links *app, Frame_Info frame_info, View_ID view){
             Rect_f32 box = box_node->rect;
             box.y0 -= log_graph.y_scroll;
             box.y1 -= log_graph.y_scroll;
+            box.x0 -= log_graph.x_scroll;
+            box.x1 -= log_graph.x_scroll;
             
             Rect_f32 box_inner = rect_inner(box, 3.f);
             
@@ -928,6 +933,8 @@ log_graph__get_box_at_point(Log_Graph *graph, Vec2_f32 p){
             Rect_f32 box = box_node->rect;
             box.y0 -= graph->y_scroll;
             box.y1 -= graph->y_scroll;
+            box.x0 -= graph->x_scroll;
+            box.x1 -= graph->x_scroll;
             if (rect_contains_point(box, p)){
                 result = box_node;
                 break;
@@ -1057,8 +1064,8 @@ CUSTOM_DOC("Parses *log* and displays the 'log graph' UI")
             
             case InputEventKind_MouseWheel:
             {
-                f32 value = in.event.mouse_wheel.y;
-                log_graph.y_scroll += f32_round32(value);
+                log_graph.y_scroll += f32_round32(in.event.mouse_wheel.y);
+                log_graph.x_scroll += f32_round32(in.event.mouse_wheel.x);
             }break;
             
             default:
