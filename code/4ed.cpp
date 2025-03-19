@@ -583,6 +583,7 @@ App_Step_Sig(app_step){
                 Temp_Memory_Block temp_key_line(scratch);
                 String_Const_u8 key_line = stringize_keyboard_event(scratch, simulated_input);
                 output_file_append(tctx, models, models->keyboard_buffer, key_line);
+                file_cursor_to_end(tctx, models, models->keyboard_buffer);
             }
         }
         
