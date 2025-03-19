@@ -97,8 +97,9 @@ struct Mac_Input_Chunk_Transient{
     b8 mouse_r_press;
     b8 mouse_r_release;
     b8 out_of_window;
+    f32 mouse_wheel_y;
+    f32 mouse_wheel_x;
     b8 trying_to_kill;
-    i32 mouse_wheel;
 };
 
 struct Mac_Input_Chunk_Persistent{
@@ -749,7 +750,8 @@ mac_toggle_fullscreen(void){
             input.mouse.press_r = input_chunk.trans.mouse_r_press;
             input.mouse.release_r = input_chunk.trans.mouse_r_release;
 
-            input.mouse.wheel = input_chunk.trans.mouse_wheel;
+            input.mouse.wheel.y = input_chunk.trans.mouse_wheel_y;
+            input.mouse.wheel.x = input_chunk.trans.mouse_wheel_x;
             input.mouse.p = input_chunk.pers.mouse;
 
             input.trying_to_kill = input_chunk.trans.trying_to_kill;
@@ -1104,17 +1106,10 @@ Input_Event *event = push_input_event(&mac_vars.frame_arena, &mac_vars.input_chu
 
 - (void)scrollWheel:(NSEvent *)event{
     f32 dy = event.scrollingDeltaY;
-    if ([event hasPreciseScrollingDeltas]){
-        mac_vars.input_chunk.trans.mouse_wheel = (i32)(-dy);
-    }
-    else{
-        if (dy > 0){
-            mac_vars.input_chunk.trans.mouse_wheel = -100;
-        }
-        else{
-            mac_vars.input_chunk.trans.mouse_wheel = 100;
-        }
-    }
+    f32 dx = event.scrollingDeltaX;
+    mac_vars.input_chunk.trans.mouse_wheel_y = -dy;
+    mac_vars.input_chunk.trans.mouse_wheel_x =  dx;
+
     system_signal_step(0);
 }
 

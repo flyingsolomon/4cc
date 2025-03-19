@@ -2216,6 +2216,7 @@ seek_pos_of_textual_line(Application_Links *app, Side side){
     i64 pos = view_get_cursor_pos(app, view);
     i64 new_pos = get_line_side_pos_from_pos(app, buffer, pos, side);
     view_set_cursor_and_preferred_x(app, view, seek_pos(new_pos));
+    view_correct_cursor(app, view);
     no_mark_snap_to_cursor_if_shift(app, view);
 }
 
@@ -2228,6 +2229,7 @@ seek_pos_of_visual_line(Application_Links *app, Side side){
     p.x = (side == Side_Min)?(0.f):(max_f32);
     i64 new_pos = view_pos_at_relative_xy(app, view, cursor.line, p);
     view_set_cursor_and_preferred_x(app, view, seek_pos(new_pos));
+    view_correct_cursor(app, view);
     no_mark_snap_to_cursor_if_shift(app, view);
 }
 

@@ -131,7 +131,8 @@ struct Linux_Input_Chunk_Transient {
     b8 mouse_l_release;
     b8 mouse_r_press;
     b8 mouse_r_release;
-    i8 mouse_wheel;
+    f32 mouse_wheel_y;
+    f32 mouse_wheel_x;
     b8 trying_to_kill;
 };
 
@@ -1574,12 +1575,13 @@ linux_handle_x11_events() {
                         linuxvars.input.pers.mouse_r = true;
                     } break;
                     
+                    // TODO(FS): Handle horizontal scroll/fractional values.
                     case Button4: {
-                        linuxvars.input.trans.mouse_wheel = -100;
+                        linuxvars.input.trans.mouse_wheel_y = -100;
                     } break;
                     
                     case Button5: {
-                        linuxvars.input.trans.mouse_wheel = +100;
+                        linuxvars.input.trans.mouse_wheel_y = +100;
                     } break;
                 }
             } break;
@@ -1986,7 +1988,8 @@ main(int argc, char **argv){
         input.mouse.release_l = linuxvars.input.trans.mouse_l_release;
         input.mouse.press_r = linuxvars.input.trans.mouse_r_press;
         input.mouse.release_r = linuxvars.input.trans.mouse_r_release;
-        input.mouse.wheel = linuxvars.input.trans.mouse_wheel;
+        input.mouse.wheel.y = linuxvars.input.trans.mouse_wheel_y;
+        // TODO(FS): No mouse_wheel_x!
         
         // NOTE(allen): Application Core Update
         Application_Step_Result result = {};

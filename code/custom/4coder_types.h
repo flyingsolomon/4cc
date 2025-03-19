@@ -312,6 +312,7 @@ enum{
 api(custom)
 typedef u8 Key_Modifier;
 
+#define WHEEL_EVENT_SUPPORTS_XY
 api(custom)
 struct Mouse_State{
     b8 l;

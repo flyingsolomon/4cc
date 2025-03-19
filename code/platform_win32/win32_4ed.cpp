@@ -87,8 +87,6 @@ struct Win32_Input_Chunk_Transient{
     b8 mouse_l_release;
     b8 mouse_r_press;
     b8 mouse_r_release;
-    f32 mouse_wheel_vertical;
-    f32 mouse_wheel_horizontal;
     b8 out_of_window;
     i16 mouse_wheel_y;
     i16 mouse_wheel_x;
