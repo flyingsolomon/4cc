@@ -13,7 +13,7 @@ set src_root=%repo_root%\code
 set build_root=%repo_root%\build
 set bin_root=%repo_root%\code\bin
 set custom_root=%repo_root%\code\custom
-set custom_bin=%custom_root\bin
+set custom_bin=%custom_root%\bin
 
 cd %location%
 
@@ -27,6 +27,8 @@ if "%1%" == "/DWIN32_OPENGL" (
 ) else (
     set backend=%2
 )
+
+if NOT "%Platform%" == "X64" IF NOT "%Platform%" == "x64" (call "%custom_bin%\setup_cl_x64.bat")
 
 if "%backend%" == "" (set backend=/DWIN32_OPENGL)
 if "%mode%" == "" (set mode=/DDEV_BUILD)
