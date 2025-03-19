@@ -24,7 +24,7 @@ cd %location%
 if NOT "%Platform%" == "X64" IF NOT "%Platform%" == "x64" (call "%custom_bin%\setup_cl_x64.bat")
 
 set target=%1
-if "%target%" == "" set target=%custom_root%\4coder_default_bindings.cpp
+if "%target%" == "" set target=%custom_root%\modal\modal.cpp
 
 set debug=/Zi
 set release=/O2 /Zi
@@ -39,6 +39,7 @@ set opts=%opts% /GR- /nologo /FC
 set opts=%opts% -I"%custom_root%"
 set opts=%opts% /D OS_WINDOWS=1 /D OS_LINUX=0 /D OS_MAC=0
 set opts=%opts% %mode%
+echo building %target% with options: %opts%
 
 set preproc_file=4coder_command_metadata.i
 set meta_opts=/P /Fi"%preproc_file%" /DMETA_PASS
@@ -57,3 +58,5 @@ del *.exp
 del *.obj
 del *.lib
 del %preproc_file%
+
+xcopy /v/y %binname%.* ..\..\build\
