@@ -14,6 +14,9 @@ codepoint_index_map_read(Codepoint_Index_Map *map, u32 codepoint, u16 *index_out
         // NOTE(allen): do nothing
     }
     else{
+        if (map->has_zero_index){
+            *index_out = map->zero_index;
+        }
         success = false;
     }
     return(success);
@@ -35,10 +38,9 @@ font_get_glyph_advance(Face_Advance_Map *map, Face_Metrics *metrics, u32 codepoi
             codepoint = ' ';
         }
         u16 index = 0;
-        if (codepoint_index_map_read(&map->codepoint_to_index, codepoint, &index)){
-            if (index < map->index_count){
-                result = map->advance[index];
-            }
+        codepoint_index_map_read(&map->codepoint_to_index, codepoint, &index);
+        if (index < map->index_count){
+            result = map->advance[index];
         }
     }
     return(result);
